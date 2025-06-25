@@ -10,6 +10,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import truyen.User;
+import truyen.UserDAO;
 
 /**
  *
@@ -17,6 +20,14 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(urlPatterns = {"/NewServlet"})
 public class NewServlet extends HttpServlet {
+
+    private UserDAO userDAO;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        userDAO = new UserDAO();
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,6 +81,23 @@ public class NewServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String action = request.getParameter("dangnhap");
+
+        if (action != null) {
+            User user = userDAO.authenticateUser(username, password);
+            if (user != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("username", username);
+                response.sendRedirect("TrangChuDaDangNhap.jsp");
+                return;
+            } else {
+                request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
+                request.getRequestDispatcher("dangnhap.jsp").forward(request, response);
+                return;
+            }
+        }
         processRequest(request, response);
     }
 

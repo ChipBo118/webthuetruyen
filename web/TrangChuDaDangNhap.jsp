@@ -1,28 +1,24 @@
-<%-- 
-    Document   : index
-    Created on : 28 thg 3, 2025, 08:08:19
-    Author     : Admin
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="jakarta.servlet.http.HttpSession"%>
+<%
+    String username = (String) session.getAttribute("username");
+    if (username == null) username = "Chippa";
+%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Trang chủ</title>
+        <title>Trang chủ - Đã đăng nhập</title>
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <%
-            String username = (String) session.getAttribute("username");
-        %>
         <header>
             <h1>NHÀ SÁCH CỦA CHIPPA</h1>
-                <img src="https://i.pinimg.com/originals/ff/d9/b4/ffd9b46366e14141790a80d4922485bf.gif" class="header-image-left">
+            <img src="https://i.pinimg.com/originals/ff/d9/b4/ffd9b46366e14141790a80d4922485bf.gif" class="header-image-left">
             <nav id="menu">
                 <ul>
-                    <li><a href="index.jsp">Trang chủ</a></li>
-                    <li class="theloai-menu">Thể loại
+                    <li><a href="TrangChuDaDangNhap.jsp">Trang chủ</a></li>
+                    <li>Thể loại
                         <ul class="submenutl">
                             <li><a href="TinhCam.jsp">Tình cảm</a></li>
                             <li><a href="HanhDong.jsp">Hành động</a></li>
@@ -33,16 +29,18 @@
                     <li><a href="lienhe.jsp">Liên hệ</a></li>
                     <li><a href="GioHang.jsp"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
                     <li class="user-avatar-menu">
-                        <a href="dangnhap.jsp" style="text-decoration:none;">
-                            <div class="user-avatar-loggedin">
-                                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="user-avatar-img" alt="avatar" />
-                                <span class="user-avatar-username">Đăng nhập</span>
+                        <div class="user-avatar-loggedin">
+                            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="user-avatar-img" alt="avatar" />
+                            <span class="user-avatar-username"><%= username %></span>
+                            <div class="user-dropdown">
+                                <a href="#">Tài khoản của tôi</a>
+                                <a href="#">Đơn thuê</a>
+                                <a href="dangxuat.jsp" id="logout-link">Đăng xuất</a>
                             </div>
-                        </a>
+                        </div>
                     </li>
                 </ul>
             </nav>
-            
             <div class="banner">
                 <div class="slides">
                     <img src="https://vn-live-02.slatic.net/p/9cb08b7b618b125ccaa3cf7aca83b605.jpg" alt="First Image">
@@ -61,15 +59,15 @@
                     <img src="https://product.hstatic.net/1000376556/product/vi_con_gai_toi_co_the_danh_bai_ca_ma_vuong_-_tap_6_final__1__128e11691cba4281b4a66f6128d92bc6_1024x1024.png" alt="Severn Image"> 
                 </div>
             </div>
-                
-                <h1> </h1>
-        <form action="search" method="get" class="search-form">
-            <label>Tìm kiếm truyện:</label>
-            <input type="text" name="searchName" />
-            <button type="submit">Tìm kiếm</button>
-        </form>
+            <form action="search" method="get">
+                <label style="font-size: 1.15rem; margin-right: 8px; align-self: center;">Tìm kiếm truyện:</label>
+                <input type="text" name="searchName" style="padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; margin-right: 8px; min-width: 220px;" />
+                <button type="submit" style="background: #f3c96b; color: #555; border: none; border-radius: 6px; padding: 7px 18px; font-size: 1rem; cursor: pointer; transition: background 0.2s; font-weight: 600;">Tìm kiếm</button>
+            </form>
+            <div style="margin-top: 20px; font-size: 1.3rem; color: #6a9c7c; font-weight: bold;">
+                Xin chào, <%= username %>! Chúc bạn một ngày vui vẻ tại Nhà sách của CHIPPA!
+            </div>
         </header>
-        
         <div class="container">
             <div class="section-box">
                 <div class="header" style="text-align: left;">
@@ -212,162 +210,158 @@
                 </div>
             </div>
         </div>
-        
         <footer>
             <p>&copy; 2025 Nhà sách của CHIPPA</p>
             <p>Mọi thông tin liên hệ qua email: bochip68@gmail.com</p>
             <p>Facebook: Chip Bơ</p>
             <p>Địa chỉ: 68 Đ. Nguyễn Chí Thanh, Láng Thượng, Đống Đa, Hà Nội</p>
         </footer>
-        
+        <style>
+        .user-avatar-menu {
+            display: flex !important;
+            align-items: center !important;
+            margin-left: 8px;
+            height: 100%;
+            background: #fbdea2;
+            border-radius: 24px;
+            padding: 0 8px;
+        }
+        .user-avatar-loggedin {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fbdea2;
+            border-radius: 24px;
+            padding: 4px 14px 4px 6px;
+            box-shadow: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #6a9c7c;
+            position: relative;
+            cursor: pointer;
+        }
+        .user-avatar-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #eee;
+        }
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fbdea2;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            min-width: 180px;
+            padding: 10px 0;
+            flex-direction: column;
+            gap: 0;
+            z-index: 100;
+            align-items: center;
+        }
+        .user-dropdown a {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 8px;
+            color: #6a9c7c !important;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.2s, color 0.2s;
+            text-align: center;
+        }
+        .user-dropdown a:hover {
+            background: #f3c96b;
+            color: #fff !important;
+            border-radius: 8px;
+        }
+        .user-avatar-loggedin:hover .user-dropdown,
+        .user-avatar-loggedin:focus-within .user-dropdown {
+            display: flex;
+        }
+        .user-avatar-loggedin:hover, .user-avatar-loggedin:focus {
+            background: #e2bc6f;
+            color: #fff;
+        }
+        .user-avatar-loggedin:hover span.user-avatar-username, .user-avatar-loggedin:focus span.user-avatar-username {
+            color: #fff;
+        }
+        .user-avatar-loggedin span.user-avatar-username {
+            color: #6a9c7c;
+            transition: color 0.2s;
+        }
+        #menu ul li ul.submenutl {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fbdea2;
+            min-width: 140px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            z-index: 10;
+            padding: 0;
+        }
+        #menu ul li ul.submenutl li:hover {
+            background: #e2bc6f;
+            color: #fff;
+            border-radius: 12px;
+        }
+        .section-box {
+            background: #fffbe9;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 32px 24px 24px 24px;
+            margin-bottom: 40px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1200px;
+        }
+        .page-btn {
+            background: #f3c96b;
+            color: #555;
+            border: none;
+            border-radius: 6px;
+            padding: 7px 18px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0 6px;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s;
+        }
+        .page-btn.active, .page-btn:hover {
+            background: #e2bc6f;
+            color: #fff;
+        }
+        </style>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var logout = document.getElementById('logout-link');
+            if (logout) {
+                logout.addEventListener('click', function(e) {
+                    setTimeout(function() { window.location.href = 'index.jsp'; }, 200);
+                });
+            }
+        });
+        function showFeaturedPage(page) {
+            document.getElementById('featured-page-1').style.display = (page === 1) ? '' : 'none';
+            document.getElementById('featured-page-2').style.display = (page === 2) ? '' : 'none';
+            document.getElementById('btn-page-1').classList.toggle('active', page === 1);
+            document.getElementById('btn-page-2').classList.toggle('active', page === 2);
+        }
+        function showNewPage(page) {
+            document.getElementById('new-page-1').style.display = (page === 1) ? '' : 'none';
+            document.getElementById('new-page-2').style.display = (page === 2) ? '' : 'none';
+            document.getElementById('btn-new-page-1').classList.toggle('active', page === 1);
+            document.getElementById('btn-new-page-2').classList.toggle('active', page === 2);
+        }
+        </script>
     </body>
-</html>
-
-<style>
-#menu ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    list-style-type: none;
-    background-color: #fbdea2;
-    padding: 0;
-    margin: 0;
-    gap: 36px;
-    height: 100%;
-}
-#menu ul li {
-    display: flex;
-    align-items: center;
-    background: none;
-    position: relative;
-    font-family: UTM Forte, Arial, sans-serif;
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #6a9c7c;
-    padding: 10px 22px;
-    border-radius: 6px;
-    transition: background 0.2s, color 0.2s;
-    cursor: pointer;
-    height: 100%;
-    line-height: 1.2;
-    box-sizing: border-box;
-    text-align: center;
-}
-.user-avatar-menu {
-    display: flex !important;
-    align-items: center !important;
-    margin-left: 8px;
-    height: 100%;
-}
-.user-avatar-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #fbdea2;
-    border-radius: 24px;
-    padding: 4px 14px 4px 6px;
-    box-shadow: none;
-    text-decoration: none;
-    color: #6a9c7c;
-    font-weight: 600;
-    font-size: 1.1rem;
-    border: none;
-    white-space: nowrap;
-}
-.user-avatar-link span {
-    font-family: UTM Forte, Arial, sans-serif;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #6a9c7c;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    margin: 0;
-    line-height: 1.2;
-}
-.user-avatar-img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #6a7ba2;
-    border: 2px solid #fbdea2;
-    margin: 0;
-    display: block;
-}
-.user-avatar-loggedin {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #fbdea2;
-    border-radius: 24px;
-    padding: 4px 14px 4px 6px;
-    box-shadow: none;
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: #6a9c7c;
-    position: relative;
-    cursor: pointer;
-}
-.user-avatar-username {
-    margin-left: 0 !important;
-}
-.user-avatar-loggedin:hover, .user-avatar-loggedin:focus {
-    background: #e2bc6f;
-    color: #fff;
-}
-.user-avatar-loggedin:hover .user-avatar-username, .user-avatar-loggedin:focus .user-avatar-username {
-    color: #fff;
-}
-.section-box {
-    background: #fffbe9;
-    /* border: 1.5px solid #e2bc6f; */
-    border-radius: 18px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    padding: 32px 24px 24px 24px;
-    margin-bottom: 40px;
-    width: 100%;
-    box-sizing: border-box;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 1200px;
-}
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    box-sizing: border-box;
-    display: block;
-}
-.page-btn {
-    background: #f3c96b;
-    color: #555;
-    border: none;
-    border-radius: 6px;
-    padding: 7px 18px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin: 0 6px;
-    font-weight: 600;
-    transition: background 0.2s, color 0.2s;
-}
-.page-btn.active, .page-btn:hover {
-    background: #e2bc6f;
-    color: #fff;
-}
-</style>
-<script>
-function showFeaturedPage(page) {
-    document.getElementById('featured-page-1').style.display = (page === 1) ? '' : 'none';
-    document.getElementById('featured-page-2').style.display = (page === 2) ? '' : 'none';
-    document.getElementById('btn-page-1').classList.toggle('active', page === 1);
-    document.getElementById('btn-page-2').classList.toggle('active', page === 2);
-}
-function showNewPage(page) {
-    document.getElementById('new-page-1').style.display = (page === 1) ? '' : 'none';
-    document.getElementById('new-page-2').style.display = (page === 2) ? '' : 'none';
-    document.getElementById('btn-new-page-1').classList.toggle('active', page === 1);
-    document.getElementById('btn-new-page-2').classList.toggle('active', page === 2);
-}
-</script>
+</html> 
